@@ -7,10 +7,10 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import scipy.ndimage
+import math
 import dicom
 import cv2
 import os
-
 from skimage import measure, morphology
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 
@@ -18,12 +18,11 @@ INPUT_FOLDER = 'G:/DL/Lung-Cancer_Detection/sample_images/'
 dimension = 224
 minimum_bound = -1000.0
 maximum_bound = 400.0
+num_slices = 20
 
 patients = os.listdir(INPUT_FOLDER)
 labels = pd.read_csv('G:/DL/Lung-Cancer_Detection/stage1_labels.csv/stage1_labels.csv')
-print(labels.head())
 patients.sort()	# sorting by names will always give same order of files
-print(patients)
 
 def print_slice(slice):
     for arr in slice:
@@ -31,6 +30,14 @@ def print_slice(slice):
 
 def convert_to_gray(pixel):
     return 0.299*pixel[0] + 0.587*pixel[1] + 0.114*pixel[2]
+
+def mean(x):
+    return sum(x)/len(x)
+
+def chunks(l, n):
+    """Yield successive n-sized chunks from l."""
+    for i in range(0, len(l), n):
+        yield l[i:i + n]
 
 def normalize(image):
     # values below -1000 (minumum_bound) corresponds to air
@@ -63,21 +70,42 @@ for patient in patients[:5]:
     for slice in slices:
         slice.SliceThickness = slice_thickness
 
-    print(len(slices))
-    print(slices[0].pixel_array.shape)
-
     # resizing scan images from (512, 512) to (dimension, dimension)
     image_slices = []
     for slice in slices:
         temp = cv2.resize(np.array(slice.pixel_array), (dimension, dimension))
-        # temp = cv2.cvtColor(temp, cv2.COLOR_RGB2GRAY)
+        temp[temp == -2000] = 0 # since the scans are circles, but images are square, the black portion outside circle corresponds to -2000 (air). replace that with 0 (water)
         temp = normalize(temp)
         image_slices.append(temp)
     image_slices = np.array(image_slices)
 
-    # since the scans are circles, but images are square, the black portion outside circle corresponds to -2000 (air)
-    # replace that with 0 (water)
-    image_slices[image_slices == -2000] = 0
+    temp = []
+    chunk_sizes = math.ceil(len(image_slices) / num_slices)
+    for image_slice_chunk in chunks(image_slices, chunk_sizes):
+        image_slice_chunk = list(map(mean, zip(*image_slice_chunk)))
+        temp.append(image_slice_chunk)
+
+    image_slices = temp
+
+    if len(image_slices) == num_slices - 1:
+        image_slices.append(image_slices[-1])
+
+    if len(image_slices) == num_slices - 2:
+        image_slices.append(image_slices[-1])
+        image_slices.append(image_slices[-1])
+
+    if len(image_slices) == num_slices + 2:
+        new_val = list(map(mean, zip(*[image_slices[num_slices - 1], image_slices[num_slices], ])))
+        del image_slices[num_slices]
+        image_slices[num_slices - 1] = new_val
+
+    if len(image_slices) == num_slices + 1:
+        new_val = list(map(mean, zip(*[image_slices[num_slices - 1], image_slices[num_slices], ])))
+        del image_slices[num_slices]
+        image_slices[num_slices - 1] = new_val
+
+    print(len(image_slices))
+
 
     '''Convert to Hounsfield units (HU)'''
     # for slice_number in range(len(slices)):
@@ -96,6 +124,6 @@ for patient in patients[:5]:
     # plt.show()
 
     # print_slice(slices[0])
-    print(image_slices[0])
-    plt.imshow(image_slices[100])
-    plt.show()
+    # print(image_slices[0])
+    # plt.imshow(image_slices[100])
+    # plt.show()
