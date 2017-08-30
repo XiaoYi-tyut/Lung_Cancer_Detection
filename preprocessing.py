@@ -16,6 +16,8 @@ from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 
 INPUT_FOLDER = 'G:/DL/Lung-Cancer_Detection/sample_images/'
 dimension = 224
+minimum_bound = -1000.0
+maximum_bound = 400.0
 
 patients = os.listdir(INPUT_FOLDER)
 labels = pd.read_csv('G:/DL/Lung-Cancer_Detection/stage1_labels.csv/stage1_labels.csv')
@@ -27,7 +29,19 @@ def print_slice(slice):
     for arr in slice:
         print(arr)
 
-for patient in patients[:1]:
+def convert_to_gray(pixel):
+    return 0.299*pixel[0] + 0.587*pixel[1] + 0.114*pixel[2]
+
+def normalize(image):
+    # values below -1000 (minumum_bound) corresponds to air
+    # values above 400 (maximum_bound) corresponds to bones
+    # therefore we normalize between -1000 and 400, and convert them to range between 0 and 1
+    image = (image - minimum_bound) / (maximum_bound - minimum_bound)
+    image[image>1] = 1.
+    image[image<0] = 0.
+    return image
+
+for patient in patients[:5]:
     # label = labels.get_value(patient, 'cancer')
 
     path = INPUT_FOLDER + patient
@@ -55,17 +69,15 @@ for patient in patients[:1]:
     # resizing scan images from (512, 512) to (dimension, dimension)
     image_slices = []
     for slice in slices:
-        image_slices.append(cv2.resize(np.array(slice.pixel_array), (dimension, dimension)))
+        temp = cv2.resize(np.array(slice.pixel_array), (dimension, dimension))
+        # temp = cv2.cvtColor(temp, cv2.COLOR_RGB2GRAY)
+        temp = normalize(temp)
+        image_slices.append(temp)
     image_slices = np.array(image_slices)
 
     # since the scans are circles, but images are square, the black portion outside circle corresponds to -2000 (air)
     # replace that with 0 (water)
     image_slices[image_slices == -2000] = 0
-
-    # print_slice(slices[0])
-    print(image_slices[0])
-    plt.imshow(image_slices[100])
-    plt.show()
 
     '''Convert to Hounsfield units (HU)'''
     # for slice_number in range(len(slices)):
@@ -83,3 +95,7 @@ for patient in patients[:1]:
     # plt.imshow(image_slices[100])
     # plt.show()
 
+    # print_slice(slices[0])
+    print(image_slices[0])
+    plt.imshow(image_slices[100])
+    plt.show()
