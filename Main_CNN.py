@@ -100,7 +100,7 @@ inception4 = BatchNormalization()(inception4)
 inception5 = inception(inception4, '4d', 112, 144, 288, 32, 64, 64)
 
 inception5 = BatchNormalization()(inception5)
-inception6 = inception(inception6, '4e', 256, 160, 320, 32, 128, 128)
+inception6 = inception(inception5, '4e', 256, 160, 320, 32, 128, 128)
 inception6 = ZeroPadding3D(padding=(1,1,1))(inception6)
 inception6 = MaxPooling3D(pool_size=(3,3,3), strides=(2,2,2), border_mode='valid')(inception6)
 
