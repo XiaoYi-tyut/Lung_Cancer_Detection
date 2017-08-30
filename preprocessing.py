@@ -15,14 +15,15 @@ from skimage import measure, morphology
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 
 INPUT_FOLDER = 'G:/DL/Lung-Cancer_Detection/sample_images/'
+OUTPUT_FOLDER = 'G:/DL/Lung-Cancer_Detection/preprocessed_images/'
 dimension = 224
 minimum_bound = -1000.0
 maximum_bound = 400.0
 num_slices = 20
 
 patients = os.listdir(INPUT_FOLDER)
-labels = pd.read_csv('G:/DL/Lung-Cancer_Detection/stage1_labels.csv/stage1_labels.csv')
 patients.sort()	# sorting by names will always give same order of files
+labels = pd.read_csv('G:/DL/Lung-Cancer_Detection/stage1_labels.csv/stage1_labels.csv')
 
 def print_slice(slice):
     for arr in slice:
@@ -49,8 +50,6 @@ def normalize(image):
     return image
 
 for patient in patients[:5]:
-    # label = labels.get_value(patient, 'cancer')
-
     path = INPUT_FOLDER + patient
     slices = [dicom.read_file(path + '/' + s) for s in os.listdir(path)]
     slices.sort(key=lambda x: float(x.ImagePositionPatient[2]))
@@ -123,7 +122,11 @@ for patient in patients[:5]:
     # plt.imshow(image_slices[100])
     # plt.show()
 
-    # print_slice(slices[0])
-    # print(image_slices[0])
-    # plt.imshow(image_slices[100])
+    # plt.imshow(image_slices[10])
     # plt.show()
+
+    try:
+        # label = labels.get_value(patient, 'cancer')
+        np.save(OUTPUT_FOLDER + patient, image_slices)
+    except:
+        print('label not found for ', patient)
