@@ -78,20 +78,12 @@ print('dataset_test_labels.shape:', dataset_test_labels.shape)
 
 # neural network start:
 input = Input(shape=(dimension, dimension, number_of_channels))
-conv1 = Convolution3D(64, 7, 7, 7, subsample=(2,2,2), border_mode='same', activation='relu', W_regularizer=l2(0.0002))(input)
+conv1 = Convolution3D(128, 3, 3, 3, subsample=(2,2,2), border_mode='same', activation='relu', W_regularizer=l2(0.0002))(input)
 conv1 = ZeroPadding3D(padding=(1,1,1))(conv1)
 conv1 = MaxPooling3D(pool_size=(3,3,3), strides=(2,2,2), border_mode='valid')(conv1)
-# conv1 = LRN2D()(conv1)
 
 conv1 = BatchNormalization()(conv1)
-conv2 = Convolution3D(64, 1, 1, 1, border_mode='same', activation='relu', W_regularizer=l2(0.0002))(conv1)
-conv2 = Convolution3D(192, 3, 3, 3, border_mode='same', activation='relu', W_regularizer=l2(0.0002))(conv2)
-# conv2 = LRN2D()(conv2)
-conv2 = ZeroPadding3D(padding=(1,1,1))(conv2)
-conv2 = MaxPooling3D(pool_size=(3,3,3), strides=(2,2,2), border_mode='valid')(conv2)
-
-conv2 = BatchNormalization()(conv2)
-inception1 = inception(conv2, '3a', 64, 96, 128, 16, 32, 32)
+inception1 = inception(conv1, '3a', 64, 96, 128, 16, 32, 32)
 
 inception1 = BatchNormalization()(inception1)
 inception2 = inception(inception1,'3b', 128, 128, 192, 32, 96, 64)
@@ -105,26 +97,21 @@ inception3 = BatchNormalization()(inception3)
 inception4 = inception(inception3, '4b', 160, 112, 224, 24, 64, 64)
 
 inception4 = BatchNormalization()(inception4)
-inception5 = inception(inception4, '4c', 128, 128, 256, 24, 64, 64)
+inception5 = inception(inception4, '4d', 112, 144, 288, 32, 64, 64)
 
 inception5 = BatchNormalization()(inception5)
-inception6 = inception(inception5, '4d', 112, 144, 288, 32, 64, 64)
+inception6 = inception(inception6, '4e', 256, 160, 320, 32, 128, 128)
+inception6 = ZeroPadding3D(padding=(1,1,1))(inception6)
+inception6 = MaxPooling3D(pool_size=(3,3,3), strides=(2,2,2), border_mode='valid')(inception6)
 
 inception6 = BatchNormalization()(inception6)
-inception7 = inception(inception6, '4e', 256, 160, 320, 32, 128, 128)
-inception7 = ZeroPadding3D(padding=(1,1,1))(inception7)
-inception7 = MaxPooling3D(pool_size=(3,3,3), strides=(2,2,2), border_mode='valid')(inception7)
+inception7 = inception(inception6, '5a', 256, 160, 320, 32, 128, 128)
+
+# inception9 = ZeroPadding2D(padding=(1,1))(inception9)
+inception7 = AveragePooling3D(pool_size=(7,7,7), strides=(1,1,1), border_mode='valid')(inception7)
 
 inception7 = BatchNormalization()(inception7)
-inception8 = inception(inception7, '5a', 256, 160, 320, 32, 128, 128)
-
-inception8 = BatchNormalization()(inception8)
-inception9 = inception(inception8, '5b', 384, 192, 384, 48, 128, 128)
-# inception9 = ZeroPadding2D(padding=(1,1))(inception9)
-inception9 = AveragePooling3D(pool_size=(7,7,7), strides=(1,1,1), border_mode='valid')(inception9)
-
-inception9 = BatchNormalization()(inception9)
-flatten = Flatten()(inception9)
+flatten = Flatten()(inception7)
 fc = Dense(1024, activation='relu', name='fc')(flatten)
 fc = Dropout(0.7)(fc)
 
