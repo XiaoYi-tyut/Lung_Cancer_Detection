@@ -16,7 +16,7 @@ from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 
 INPUT_FOLDER = 'G:/DL/Lung-Cancer_Detection/sample_images/'
 OUTPUT_FOLDER = 'G:/DL/Lung-Cancer_Detection/preprocessed_images/'
-dimension = 224
+dimension = 112
 minimum_bound = -1000.0
 maximum_bound = 400.0
 num_slices = 20
@@ -124,6 +124,8 @@ for patient in patients[:5]:
 
     # plt.imshow(image_slices[10])
     # plt.show()
+
+
 
     try:
         # label = labels.get_value(patient, 'cancer')

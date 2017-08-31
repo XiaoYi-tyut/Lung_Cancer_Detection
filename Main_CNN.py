@@ -12,7 +12,7 @@ from keras.callbacks import EarlyStopping, ModelCheckpoint
 from LRN_helper import LRN2D
 
 number_of_classes = 2
-dimension = 224
+dimension = 112
 number_of_channels = 1
 batch_size = 50
 features_directory = 'G:/DL/Lung-Cancer_Detection/preprocessed_images/'
@@ -29,18 +29,16 @@ def load_features_and_labels_dataset(features_directory, labels_directory):
 
     for file in labels:
         try:
-            label = labels.get_value(labels_directory + file, 'cancer')
+            label_index = labels.get_value(labels_directory + file, 'cancer')
+            label = np.zeros(2)
+            label[int(label_index)] = 1
             dataset_labels.append(label)
-            dataset_features.append(np.load(features_directory + file))
+            dataset_features.append(np.load(features_directory + file).reshape(-1, dimension, dimension, number_of_channels))
         except:
             print('label missing for file', file)
 
     return np.array(dataset_features), np.array(dataset_labels)
 
-
-
-
-    return np.array(dataset_features)
 
 def inception(input, prefix, n1x1, r3x3, n3x3, r5x5, n5x5, m1x1):
     # input = Input(shape=shape)(input)
@@ -70,14 +68,14 @@ dataset_test_labels = dataset_labels[1200:dataset_labels.shape[0], :]
 dataset_train_features = dataset_features[0:1200, :]
 dataset_train_labels = dataset_labels[0:1200, :]
 
-# reshaping
-dataset_train_features = dataset_train_features.reshape((-1, dimension, dimension, number_of_channels))
-dataset_test_features = dataset_test_features.reshape((-1, dimension, dimension, number_of_channels))
+# print shape
+print('dataset_train_features.shape:', dataset_train_features.shape)
+print('dataset_train_labels.shape:', dataset_train_labels.shape)
 print('dataset_test_features.shape:', dataset_test_features.shape)
 print('dataset_test_labels.shape:', dataset_test_labels.shape)
 
 # neural network start:
-input = Input(shape=(dimension, dimension, number_of_channels))
+input = Input(shape=(20, dimension, dimension, number_of_channels))
 conv1 = Convolution3D(128, 3, 3, 3, subsample=(2,2,2), border_mode='same', activation='relu', W_regularizer=l2(0.0002))(input)
 conv1 = ZeroPadding3D(padding=(1,1,1))(conv1)
 conv1 = MaxPooling3D(pool_size=(3,3,3), strides=(2,2,2), border_mode='valid')(conv1)
@@ -108,7 +106,7 @@ inception6 = BatchNormalization()(inception6)
 inception7 = inception(inception6, '5a', 256, 160, 320, 32, 128, 128)
 
 # inception9 = ZeroPadding2D(padding=(1,1))(inception9)
-inception7 = AveragePooling3D(pool_size=(7,7,7), strides=(1,1,1), border_mode='valid')(inception7)
+inception7 = AveragePooling3D(pool_size=(2,2,2), strides=(1,1,1), border_mode='valid')(inception7)
 
 inception7 = BatchNormalization()(inception7)
 flatten = Flatten()(inception7)
@@ -126,18 +124,18 @@ adam = Adam(decay=decay)
 # early_stopping = EarlyStopping(patience=2)
 
 # checkpoint
-filepath = "/output/weights-improvement-{epoch:02d}-{val_acc:.2f}.hdf5"
+filepath = "G:/DL/Lung-Cancer_Detection/output/weights-improvement-{epoch:02d}-{val_acc:.2f}.hdf5"
 checkpoint = ModelCheckpoint(filepath, monitor='val_acc', verbose=1, save_best_only=True, mode='max')
 callbacks_list = [checkpoint]
 
 model = Model(inputs=input, outputs=output_layer)
-model.compile(loss='categorical_crossentropy', optimizer=adam, metrics=['accuracy'])
 print(model.summary())
+model.compile(loss='categorical_crossentropy', optimizer=adam, metrics=['accuracy'])
 model.fit(dataset_train_features, dataset_train_labels, validation_data=(dataset_test_features, dataset_test_labels), epochs=epochs, batch_size=batch_size, callbacks=callbacks_list)
-predictions = model.predict(dataset_test_features)
+# predictions = model.predict(dataset_test_features)
 
 model_json = model.to_json()
-with open("/output/model_g_1.json", "w") as json_file:
+with open("G:/DL/Lung-Cancer_Detection/output/model_g_1.json", "w") as json_file:
     json_file.write(model_json)
 # serialize weights to HDF5
 model.save_weights("/output/model_g_1.h5")
