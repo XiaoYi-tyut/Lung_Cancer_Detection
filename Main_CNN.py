@@ -39,7 +39,6 @@ def load_features_and_labels_dataset(features_directory, labels_directory):
 
     return np.array(dataset_features), np.array(dataset_labels)
 
-
 def inception(input, prefix, n1x1, r3x3, n3x3, r5x5, n5x5, m1x1):
     # input = Input(shape=shape)(input)
     layer_conv_1x1_b = Convolution3D(r3x3, 1, 1, 1, border_mode='same', activation='relu', name=prefix+'layer_conv_1x1_b', W_regularizer=l2(0.0002))(input)
@@ -121,7 +120,6 @@ epochs = 50
 lrate = 0.0001
 decay = lrate/epochs
 adam = Adam(decay=decay)
-# early_stopping = EarlyStopping(patience=2)
 
 # checkpoint
 filepath = "G:/DL/Lung-Cancer_Detection/output/weights-improvement-{epoch:02d}-{val_acc:.2f}.hdf5"
@@ -138,5 +136,5 @@ model_json = model.to_json()
 with open("G:/DL/Lung-Cancer_Detection/output/model_g_1.json", "w") as json_file:
     json_file.write(model_json)
 # serialize weights to HDF5
-model.save_weights("/output/model_g_1.h5")
+model.save_weights("G:/DL/Lung-Cancer_Detection/output/model_g_1.h5")
 print("Saved model to disk")

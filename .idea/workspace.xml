@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a3f030f4-d01d-4f7b-8103-4ce84d028fcb" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Main_CNN.py" afterPath="$PROJECT_DIR$/Main_CNN.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/preprocessing.py" afterPath="$PROJECT_DIR$/preprocessing.py" />
     </list>
@@ -13,7 +14,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/Lung_Cancer_Detection$preprocessing.coverage" NAME="preprocessing Coverage Results" MODIFIED="1504138600351" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Lung_Cancer_Detection$preprocessing.coverage" NAME="preprocessing Coverage Results" MODIFIED="1504158423589" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Lung_Cancer_Detection$Main_CNN.coverage" NAME="Main_CNN Coverage Results" MODIFIED="1504144654188" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="CreatePatchCommitExecutor">
@@ -22,11 +23,11 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
-      <file leaf-file-name="preprocessing.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="preprocessing.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/preprocessing.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-910">
-              <caret line="50" column="0" lean-forward="false" selection-start-line="50" selection-start-column="0" selection-end-line="50" selection-end-column="0" />
+            <state relative-caret-position="1782">
+              <caret line="100" column="43" lean-forward="true" selection-start-line="100" selection-start-column="43" selection-end-line="100" selection-end-column="43" />
               <folding>
                 <element signature="e#120#138#0" expanded="true" />
                 <element signature="e#786#822#0" expanded="false" />
@@ -34,22 +35,22 @@
                 <element signature="e#930#950#0" expanded="false" />
                 <element signature="e#974#1078#0" expanded="false" />
                 <element signature="e#1106#1450#0" expanded="false" />
-                <element signature="e#1657#1981#1" expanded="false" />
-                <element signature="e#3846#3887#0" expanded="false" />
+                <element signature="e#1653#1977#1" expanded="false" />
+                <element signature="e#3842#3883#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Main_CNN.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Main_CNN.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Main_CNN.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="328">
-              <caret line="137" column="38" lean-forward="false" selection-start-line="137" selection-start-column="38" selection-end-line="137" selection-end-column="38" />
+            <state relative-caret-position="242">
+              <caret line="39" column="63" lean-forward="false" selection-start-line="39" selection-start-column="63" selection-end-line="39" selection-end-column="63" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
                 <element signature="e#741#1399#0" expanded="false" />
-                <element signature="e#1472#3107#0" expanded="false" />
+                <element signature="e#1471#3106#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -75,8 +76,8 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/preprocessing.py" />
         <option value="$PROJECT_DIR$/Main_CNN.py" />
+        <option value="$PROJECT_DIR$/preprocessing.py" />
       </list>
     </option>
   </component>
@@ -108,7 +109,6 @@
     </navigator>
     <panes>
       <pane id="Scope" />
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -123,6 +123,7 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -137,7 +138,7 @@
       <recent name="G:\DL\Lung-Cancer_Detection\project\Lung_Cancer_Detection" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.Main_CNN">
+  <component name="RunManager" selected="Python.preprocessing">
     <configuration default="false" name="preprocessing" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -394,8 +395,8 @@
     </list>
     <recent_temporary>
       <list size="2">
-        <item index="0" class="java.lang.String" itemvalue="Python.Main_CNN" />
-        <item index="1" class="java.lang.String" itemvalue="Python.preprocessing" />
+        <item index="0" class="java.lang.String" itemvalue="Python.preprocessing" />
+        <item index="1" class="java.lang.String" itemvalue="Python.Main_CNN" />
       </list>
     </recent_temporary>
   </component>
@@ -416,13 +417,13 @@
     <frame x="-9" y="-9" width="1938" height="1050" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26852846" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27228788" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3298122" sideWeight="0.5064447" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3298122" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3298122" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3298122" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3298122" sideWeight="0.4935553" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -451,6 +452,35 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/preprocessing.py">
       <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="792">
+          <caret line="50" column="0" lean-forward="false" selection-start-line="50" selection-start-column="0" selection-end-line="50" selection-end-column="0" />
+          <folding>
+            <element signature="e#120#138#0" expanded="true" />
+            <element signature="e#786#822#0" expanded="false" />
+            <element signature="e#856#911#0" expanded="false" />
+            <element signature="e#930#950#0" expanded="false" />
+            <element signature="e#974#1078#0" expanded="false" />
+            <element signature="e#1106#1450#0" expanded="false" />
+            <element signature="e#1653#1977#1" expanded="false" />
+            <element signature="e#3842#3883#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Main_CNN.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#23#0" expanded="true" />
+            <element signature="e#741#1399#0" expanded="false" />
+            <element signature="e#1471#3106#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/preprocessing.py">
+      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2046">
           <caret line="128" column="53" lean-forward="true" selection-start-line="128" selection-start-column="10" selection-end-line="128" selection-end-column="53" />
           <folding>
@@ -460,8 +490,8 @@
             <element signature="e#930#950#0" expanded="false" />
             <element signature="e#974#1078#0" expanded="false" />
             <element signature="e#1106#1450#0" expanded="false" />
-            <element signature="e#1657#1981#1" expanded="false" />
-            <element signature="e#3846#3887#0" expanded="false" />
+            <element signature="e#1653#1977#1" expanded="false" />
+            <element signature="e#3842#3883#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -473,7 +503,7 @@
           <folding>
             <element signature="e#0#23#0" expanded="true" />
             <element signature="e#741#1399#0" expanded="false" />
-            <element signature="e#1472#3107#0" expanded="false" />
+            <element signature="e#1471#3106#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -482,7 +512,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -497,8 +526,8 @@
             <element signature="e#930#950#0" expanded="false" />
             <element signature="e#974#1078#0" expanded="false" />
             <element signature="e#1106#1450#0" expanded="false" />
-            <element signature="e#1657#1981#1" expanded="false" />
-            <element signature="e#3846#3887#0" expanded="false" />
+            <element signature="e#1653#1977#1" expanded="false" />
+            <element signature="e#3842#3883#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -514,8 +543,8 @@
             <element signature="e#930#950#0" expanded="false" />
             <element signature="e#974#1078#0" expanded="false" />
             <element signature="e#1106#1450#0" expanded="false" />
-            <element signature="e#1657#1981#1" expanded="false" />
-            <element signature="e#3846#3887#0" expanded="false" />
+            <element signature="e#1653#1977#1" expanded="false" />
+            <element signature="e#3842#3883#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -531,8 +560,8 @@
             <element signature="e#930#950#0" expanded="false" />
             <element signature="e#974#1078#0" expanded="false" />
             <element signature="e#1106#1450#0" expanded="false" />
-            <element signature="e#1657#1981#1" expanded="false" />
-            <element signature="e#3846#3887#0" expanded="false" />
+            <element signature="e#1653#1977#1" expanded="false" />
+            <element signature="e#3842#3883#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -548,8 +577,8 @@
             <element signature="e#930#950#0" expanded="false" />
             <element signature="e#974#1078#0" expanded="false" />
             <element signature="e#1106#1450#0" expanded="false" />
-            <element signature="e#1657#1981#1" expanded="false" />
-            <element signature="e#3846#3887#0" expanded="false" />
+            <element signature="e#1653#1977#1" expanded="false" />
+            <element signature="e#3842#3883#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -558,24 +587,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-440">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/preprocessing.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-910">
-          <caret line="50" column="0" lean-forward="false" selection-start-line="50" selection-start-column="0" selection-end-line="50" selection-end-column="0" />
-          <folding>
-            <element signature="e#120#138#0" expanded="true" />
-            <element signature="e#786#822#0" expanded="false" />
-            <element signature="e#856#911#0" expanded="false" />
-            <element signature="e#930#950#0" expanded="false" />
-            <element signature="e#974#1078#0" expanded="false" />
-            <element signature="e#1106#1450#0" expanded="false" />
-            <element signature="e#1657#1981#1" expanded="false" />
-            <element signature="e#3846#3887#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -583,18 +594,34 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="179">
           <caret line="586" column="0" lean-forward="false" selection-start-line="586" selection-start-column="0" selection-end-line="586" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Main_CNN.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="328">
-          <caret line="137" column="38" lean-forward="false" selection-start-line="137" selection-start-column="38" selection-end-line="137" selection-end-column="38" />
+        <state relative-caret-position="242">
+          <caret line="39" column="63" lean-forward="false" selection-start-line="39" selection-start-column="63" selection-end-line="39" selection-end-column="63" />
           <folding>
             <element signature="e#0#23#0" expanded="true" />
             <element signature="e#741#1399#0" expanded="false" />
-            <element signature="e#1472#3107#0" expanded="false" />
+            <element signature="e#1471#3106#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/preprocessing.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1782">
+          <caret line="100" column="43" lean-forward="true" selection-start-line="100" selection-start-column="43" selection-end-line="100" selection-end-column="43" />
+          <folding>
+            <element signature="e#120#138#0" expanded="true" />
+            <element signature="e#786#822#0" expanded="false" />
+            <element signature="e#856#911#0" expanded="false" />
+            <element signature="e#930#950#0" expanded="false" />
+            <element signature="e#974#1078#0" expanded="false" />
+            <element signature="e#1106#1450#0" expanded="false" />
+            <element signature="e#1653#1977#1" expanded="false" />
+            <element signature="e#3842#3883#0" expanded="false" />
           </folding>
         </state>
       </provider>

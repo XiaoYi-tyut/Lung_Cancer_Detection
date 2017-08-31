@@ -14,7 +14,7 @@ import os
 from skimage import measure, morphology
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 
-INPUT_FOLDER = 'G:/DL/Lung-Cancer_Detection/sample_images/'
+INPUT_FOLDER = 'G:/DL/Lung-Cancer_Detection/stage1/stage1/'
 OUTPUT_FOLDER = 'G:/DL/Lung-Cancer_Detection/preprocessed_images/'
 dimension = 112
 minimum_bound = -1000.0
@@ -49,7 +49,7 @@ def normalize(image):
     image[image<0] = 0.
     return image
 
-for patient in patients[:5]:
+for patient in patients:
     path = INPUT_FOLDER + patient
     slices = [dicom.read_file(path + '/' + s) for s in os.listdir(path)]
     slices.sort(key=lambda x: float(x.ImagePositionPatient[2]))
