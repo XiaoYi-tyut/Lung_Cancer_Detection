@@ -46,6 +46,13 @@ def load_features_and_labels_dataset(features_directory, labels_directory):
     print('files_no_labels:', files_no_labels)
     return np.array(dataset_features), np.array(dataset_labels)
 
+def duplicate_d_times(dataset, duplicate_times):
+    dataset_concatenated = dataset
+    for d in range(1, duplicate_times):
+        dataset_concatenated = np.concatenate((dataset_concatenated, dataset), axis=0)
+
+    return dataset_concatenated
+
 def inception(input, prefix, n1x1, r3x3, n3x3, r5x5, n5x5, m1x1):
     # input = Input(shape=shape)(input)
     layer_conv_1x1_b = Convolution3D(r3x3, 1, 1, 1, border_mode='same', activation='relu', name=prefix+'layer_conv_1x1_b', W_regularizer=l2(0.0002))(input)
@@ -70,11 +77,6 @@ dataset_features, dataset_labels = load_features_and_labels_dataset(features_dir
 print('dataset_features.shape:', dataset_features.shape)
 print('dataset_labels.shape:', dataset_labels.shape)
 
-ones = 0
-for arr in dataset_labels:
-    if arr[1] == 1:
-        ones += 1
-
 # normalize between 0 and 1
 dataset_features_max_value = np.amax(dataset_features)
 dataset_features_min_value = np.amin(dataset_features)
@@ -84,6 +86,10 @@ dataset_features = (dataset_features-dataset_features_min_value) / (dataset_feat
 
 # reshaping due to issues not able to find
 dataset_features = dataset_features.reshape(-1, 20, dimension, dimension, number_of_channels)
+
+# duplicate dataset d times to increase its size
+d = 100
+dataset_features = duplicate_d_times(dataset_features, d)
 
 # divide
 dataset_test_features = dataset_features[1000:dataset_features.shape[0]]
@@ -97,8 +103,12 @@ print('dataset_train_labels.shape:', dataset_train_labels.shape)
 print('dataset_test_features.shape:', dataset_test_features.shape)
 print('dataset_test_labels.shape:', dataset_test_labels.shape)
 
+ones = 0
 for arr in dataset_test_labels:
-    print(arr)
+    if arr[1] == 1:
+        ones += 1
+
+print('ones:', ones)
 
 # neural network start:
 input = Input(shape=(20, dimension, dimension, number_of_channels))
@@ -137,7 +147,7 @@ inception7 = AveragePooling3D(pool_size=(2,2,2), strides=(1,1,1), border_mode='v
 inception7 = BatchNormalization()(inception7)
 flatten = Flatten()(inception7)
 fc = Dense(1024, activation='relu', name='fc')(flatten)
-fc = Dropout(0.7)(fc)
+fc = Dropout(0.5)(fc)
 
 fc = BatchNormalization()(fc)
 output_layer = Dense(number_of_classes, name='output_layer')(fc)
