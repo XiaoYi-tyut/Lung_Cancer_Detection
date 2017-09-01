@@ -73,7 +73,7 @@ print('dataset_labels.shape:', dataset_labels.shape)
 
 ones = 0
 for arr in dataset_labels:
-    if arr == [0,1]:
+    if arr[1] == 1:
         ones += 1
 
 
