@@ -71,6 +71,19 @@ dataset_features, dataset_labels = load_features_and_labels_dataset(features_dir
 print('dataset_features.shape:', dataset_features.shape)
 print('dataset_labels.shape:', dataset_labels.shape)
 
+ones = 0
+for arr in dataset_labels:
+    if arr == [0,1]:
+        ones += 1
+
+
+# normalize between 0 and 1
+dataset_features_max_value = max(dataset_features)
+dataset_features_min_value = min(dataset_features)
+print('dataset_features_max_value:', dataset_features_max_value)
+print('dataset_features_min_value:', dataset_features_min_value)
+dataset_features = (dataset_features-dataset_features_min_value) / (dataset_features_max_value - dataset_features_min_value)
+
 # reshaping due to issues not able to find
 dataset_features = dataset_features.reshape(-1, 20, dimension, dimension, number_of_channels)
 

@@ -10,14 +10,13 @@ from keras.regularizers import l2
 from keras.models import Model, model_from_json
 from keras.optimizers import Adam
 from keras.callbacks import EarlyStopping, ModelCheckpoint
-from LRN_helper import LRN2D
 
 number_of_classes = 2
 dimension = 112
 number_of_channels = 1
 batch_size = 50
-features_directory = 'G:/DL/Lung-Cancer_Detection/preprocessed_images/'
-labels_directory = 'G:/DL/Lung-Cancer_Detection/stage1_labels.csv/'
+features_directory = 'G:/DL/Lung-Cancer_Detection/floydhub/data/preprocessed_images/'
+labels_directory = 'G:/DL/Lung-Cancer_Detection/floydhub/data/stage1_labels.csv/'
 
 def load_features_and_labels_dataset(features_directory, labels_directory):
     dataset_features = []
@@ -71,6 +70,15 @@ dataset_features, dataset_labels = load_features_and_labels_dataset(features_dir
 print('dataset_features.shape:', dataset_features.shape)
 print('dataset_labels.shape:', dataset_labels.shape)
 
+ones = 0
+for arr in dataset_labels:
+    if arr == [0,1]:
+        ones += 1
+
+dataset_features_max_value = max(dataset_features)
+print('dataset_features_max_value:', dataset_features_max_value)
+dataset_features = dataset_features / dataset_features_max_value
+
 # reshaping due to issues not able to find
 dataset_features = dataset_features.reshape(-1, 20, dimension, dimension, number_of_channels)
 
@@ -85,6 +93,9 @@ print('dataset_train_features.shape:', dataset_train_features.shape)
 print('dataset_train_labels.shape:', dataset_train_labels.shape)
 print('dataset_test_features.shape:', dataset_test_features.shape)
 print('dataset_test_labels.shape:', dataset_test_labels.shape)
+
+for arr in dataset_test_labels:
+    print(arr)
 
 # neural network start:
 input = Input(shape=(20, dimension, dimension, number_of_channels))
