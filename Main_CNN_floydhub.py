@@ -37,6 +37,16 @@ def load_features_and_labels_dataset(features_directory, labels_directory):
             label = np.zeros(2)
             label[int(label_index)] = 1
             dataset_labels.append(label)
+
+            # for rebalancing:
+            if int(label_index) == 1:
+                dataset_labels.append(label)
+                dataset_labels.append(label)
+                dataset_labels.append(label)
+                dataset_features.append(dataset_feature_temp)
+                dataset_features.append(dataset_feature_temp)
+                dataset_features.append(dataset_feature_temp)
+
             files_read += 1
             print('files_read:', files_read)
         except:
@@ -77,25 +87,19 @@ dataset_features, dataset_labels = load_features_and_labels_dataset(features_dir
 print('dataset_features.shape:', dataset_features.shape)
 print('dataset_labels.shape:', dataset_labels.shape)
 
-# normalize between 0 and 1
-dataset_features_max_value = np.amax(dataset_features)
-dataset_features_min_value = np.amin(dataset_features)
-print('dataset_features_max_value:', dataset_features_max_value)
-print('dataset_features_min_value:', dataset_features_min_value)
-dataset_features = (dataset_features-dataset_features_min_value) / (dataset_features_max_value - dataset_features_min_value)
-
 # reshaping due to issues not able to find
 dataset_features = dataset_features.reshape(-1, 20, dimension, dimension, number_of_channels)
 
-# duplicate dataset d times to increase its size
-d = 100
-dataset_features = duplicate_d_times(dataset_features, d)
-
 # divide
-dataset_test_features = dataset_features[1000:dataset_features.shape[0]]
-dataset_test_labels = dataset_labels[1000:dataset_labels.shape[0]]
-dataset_train_features = dataset_features[0:1000]
-dataset_train_labels = dataset_labels[0:1000]
+dataset_test_features = dataset_features[2200:dataset_features.shape[0]]
+dataset_test_labels = dataset_labels[2200:dataset_labels.shape[0]]
+dataset_train_features = dataset_features[0:2200]
+dataset_train_labels = dataset_labels[0:2200]
+
+# duplicate training dataset d times to increase its size
+d = 2
+dataset_train_features = duplicate_d_times(dataset_train_features, d)
+dataset_train_labels = duplicate_d_times(dataset_train_labels, d)
 
 # print shape
 print('dataset_train_features.shape:', dataset_train_features.shape)
@@ -124,25 +128,14 @@ inception2 = inception(inception1,'3b', 128, 128, 192, 32, 96, 64)
 inception2 = ZeroPadding3D(padding=(1,1,1))(inception2)
 inception2 = MaxPooling3D(pool_size=(3,3,3), strides=(2,2,2), border_mode='valid')(inception2)
 
-inception2 = BatchNormalization()(inception2)
-inception3 = inception(inception2, '4a', 192, 96, 208, 16, 48, 64)
-
-inception3 = BatchNormalization()(inception3)
-inception4 = inception(inception3, '4b', 160, 112, 224, 24, 64, 64)
-
-inception4 = BatchNormalization()(inception4)
-inception5 = inception(inception4, '4d', 112, 144, 288, 32, 64, 64)
-
-inception5 = BatchNormalization()(inception5)
-inception6 = inception(inception5, '4e', 256, 160, 320, 32, 128, 128)
+inception5 = BatchNormalization()(inception2)
+inception6 = inception(inception5, '4e', 160, 112, 224, 24, 64, 64)
 inception6 = ZeroPadding3D(padding=(1,1,1))(inception6)
 inception6 = MaxPooling3D(pool_size=(3,3,3), strides=(2,2,2), border_mode='valid')(inception6)
 
 inception6 = BatchNormalization()(inception6)
 inception7 = inception(inception6, '5a', 256, 160, 320, 32, 128, 128)
-
-# inception9 = ZeroPadding2D(padding=(1,1))(inception9)
-inception7 = AveragePooling3D(pool_size=(2,2,2), strides=(1,1,1), border_mode='valid')(inception7)
+inception7 = MaxPooling3D(pool_size=(2,2,2), strides=(1,1,1), border_mode='valid')(inception7)
 
 inception7 = BatchNormalization()(inception7)
 flatten = Flatten()(inception7)
@@ -153,8 +146,8 @@ fc = BatchNormalization()(fc)
 output_layer = Dense(number_of_classes, name='output_layer')(fc)
 output_layer = Activation('softmax')(output_layer)
 
-epochs = 50
-lrate = 0.0001
+epochs = 200
+lrate = 0.00001
 decay = lrate/epochs
 adam = Adam(decay=decay)
 

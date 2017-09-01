@@ -15,8 +15,8 @@ number_of_classes = 2
 dimension = 112
 number_of_channels = 1
 batch_size = 50
-features_directory = 'G:/DL/Lung-Cancer_Detection/floydhub/data/preprocessed_images/'
-labels_directory = 'G:/DL/Lung-Cancer_Detection/floydhub/data/stage1_labels.csv/'
+features_directory = '/input/preprocessed_images/'
+labels_directory = '/input/stage1_labels.csv/'
 
 def load_features_and_labels_dataset(features_directory, labels_directory):
     dataset_features = []
@@ -37,6 +37,16 @@ def load_features_and_labels_dataset(features_directory, labels_directory):
             label = np.zeros(2)
             label[int(label_index)] = 1
             dataset_labels.append(label)
+
+            # for rebalancing:
+            if int(label_index) == 1:
+                dataset_labels.append(label)
+                dataset_labels.append(label)
+                dataset_labels.append(label)
+                dataset_features.append(dataset_feature_temp)
+                dataset_features.append(dataset_feature_temp)
+                dataset_features.append(dataset_feature_temp)
+
             files_read += 1
             print('files_read:', files_read)
         except:
@@ -53,26 +63,6 @@ def duplicate_d_times(dataset, duplicate_times):
 
     return dataset_concatenated
 
-def inception(input, prefix, n1x1, r3x3, n3x3, r5x5, n5x5, m1x1):
-    # input = Input(shape=shape)(input)
-    layer_conv_1x1_b = Convolution3D(r3x3, 1, 1, 1, border_mode='same', activation='relu', name=prefix+'layer_conv_1x1_b', W_regularizer=l2(0.0002))(input)
-    layer_conv_1x1_b= BatchNormalization()(layer_conv_1x1_b)
-    layer_conv_1x1_c = Convolution3D(r5x5, 1, 1, 1, border_mode='same', activation='relu', name=prefix+'layer_conv_1x1_c', W_regularizer=l2(0.0002))(input)
-    layer_conv_1x1_c = BatchNormalization()(layer_conv_1x1_c)
-    layer_max_3x3_d = MaxPooling3D(pool_size=(3, 3, 3), strides=(1, 1, 1), border_mode='same', name=prefix+'layer_max_3x3_d')(input)
-
-    layer_conv_1x1_a = Convolution3D(n1x1, 1, 1, 1, border_mode='same', activation='relu', name=prefix+'layer_conv_1x1_a', W_regularizer=l2(0.0002))(input)
-    layer_conv_1x1_a = BatchNormalization()(layer_conv_1x1_a)
-    layer_conv_3x3_b = Convolution3D(n3x3, 3, 3, 3, border_mode='same', activation='relu', name=prefix+'layer_conv_3x3_b', W_regularizer=l2(0.0002))(layer_conv_1x1_b)
-    layer_conv_3x3_b = BatchNormalization()(layer_conv_3x3_b)
-    layer_conv_5x5_c = Convolution3D(n5x5, 5, 5, 5, border_mode='same', activation='relu', name=prefix+'layer_conv_5x5_c', W_regularizer=l2(0.0002))(layer_conv_1x1_c)
-    layer_conv_5x5_c = BatchNormalization()(layer_conv_5x5_c)
-    layer_conv_1x1_d = Convolution3D(m1x1, 1, 1, 1, border_mode='same', activation='relu', name=prefix+'layer_conv_1x1_d', W_regularizer=l2(0.0002))(layer_max_3x3_d)
-    layer_conv_1x1_d = BatchNormalization()(layer_conv_1x1_d)
-
-    output = merge([layer_conv_1x1_a, layer_conv_3x3_b, layer_conv_5x5_c, layer_conv_1x1_d], mode='concat')
-    return output
-
 dataset_features, dataset_labels = load_features_and_labels_dataset(features_directory, labels_directory)
 print('dataset_features.shape:', dataset_features.shape)
 print('dataset_labels.shape:', dataset_labels.shape)
@@ -81,13 +71,13 @@ print('dataset_labels.shape:', dataset_labels.shape)
 dataset_features = dataset_features.reshape(-1, 20, dimension, dimension, number_of_channels)
 
 # divide
-dataset_test_features = dataset_features[1000:dataset_features.shape[0]]
-dataset_test_labels = dataset_labels[1000:dataset_labels.shape[0]]
-dataset_train_features = dataset_features[0:1000]
-dataset_train_labels = dataset_labels[0:1000]
+dataset_test_features = dataset_features[2200:dataset_features.shape[0]]
+dataset_test_labels = dataset_labels[2200:dataset_labels.shape[0]]
+dataset_train_features = dataset_features[0:2200]
+dataset_train_labels = dataset_labels[0:2200]
 
 # duplicate training dataset d times to increase its size
-d = 10
+d = 2
 dataset_train_features = duplicate_d_times(dataset_train_features, d)
 dataset_train_labels = duplicate_d_times(dataset_train_labels, d)
 
@@ -111,35 +101,22 @@ conv1 = ZeroPadding3D(padding=(1,1,1))(conv1)
 conv1 = MaxPooling3D(pool_size=(3,3,3), strides=(2,2,2), border_mode='valid')(conv1)
 
 conv1 = BatchNormalization()(conv1)
-inception1 = inception(conv1, '3a', 64, 96, 128, 16, 32, 32)
+conv2 = Convolution3D(256, 3, 3, 3, subsample=(2,2,2), border_mode='same', activation='relu', W_regularizer=l2(0.0002))(conv1)
+conv2 = ZeroPadding3D(padding=(1,1,1))(conv2)
+conv2 = MaxPooling3D(pool_size=(3,3,3), strides=(2,2,2), border_mode='valid')(conv2)
 
-inception1 = BatchNormalization()(inception1)
-inception2 = inception(inception1,'3b', 128, 128, 192, 32, 96, 64)
-inception2 = ZeroPadding3D(padding=(1,1,1))(inception2)
-inception2 = MaxPooling3D(pool_size=(3,3,3), strides=(2,2,2), border_mode='valid')(inception2)
+conv2 = BatchNormalization()(conv2)
+conv3 = Convolution3D(512, 3, 3, 3, subsample=(2,2,2), border_mode='same', activation='relu', W_regularizer=l2(0.0002))(conv2)
+conv3 = ZeroPadding3D(padding=(1,1,1))(conv3)
+conv3 = MaxPooling3D(pool_size=(3,3,3), strides=(2,2,2), border_mode='valid')(conv3)
 
-inception2 = BatchNormalization()(inception2)
-inception3 = inception(inception2, '4a', 192, 96, 208, 16, 48, 64)
+conv3 = BatchNormalization()(conv3)
+conv4 = Convolution3D(512+256, 3, 3, 3, subsample=(2,2,2), border_mode='same', activation='relu', W_regularizer=l2(0.0002))(conv3)
+conv4 = ZeroPadding3D(padding=(1,1,1))(conv4)
+conv4 = MaxPooling3D(pool_size=(3,3,3), strides=(2,2,2), border_mode='valid')(conv4)
 
-inception3 = BatchNormalization()(inception3)
-inception4 = inception(inception3, '4b', 160, 112, 224, 24, 64, 64)
-
-inception4 = BatchNormalization()(inception4)
-inception5 = inception(inception4, '4d', 112, 144, 288, 32, 64, 64)
-
-inception5 = BatchNormalization()(inception5)
-inception6 = inception(inception5, '4e', 256, 160, 320, 32, 128, 128)
-inception6 = ZeroPadding3D(padding=(1,1,1))(inception6)
-inception6 = MaxPooling3D(pool_size=(3,3,3), strides=(2,2,2), border_mode='valid')(inception6)
-
-inception6 = BatchNormalization()(inception6)
-inception7 = inception(inception6, '5a', 256, 160, 320, 32, 128, 128)
-
-# inception9 = ZeroPadding2D(padding=(1,1))(inception9)
-inception7 = AveragePooling3D(pool_size=(2,2,2), strides=(1,1,1), border_mode='valid')(inception7)
-
-inception7 = BatchNormalization()(inception7)
-flatten = Flatten()(inception7)
+conv4 = BatchNormalization()(conv4)
+flatten = Flatten()(conv4)
 fc = Dense(1024, activation='relu', name='fc')(flatten)
 fc = Dropout(0.5)(fc)
 
@@ -153,7 +130,7 @@ decay = lrate/epochs
 adam = Adam(decay=decay)
 
 # checkpoint
-filepath = "G:/DL/Lung-Cancer_Detection/output/weights-improvement-{epoch:02d}-{val_acc:.2f}.hdf5"
+filepath = "/output/weights-improvement-{epoch:02d}-{val_acc:.2f}.hdf5"
 checkpoint = ModelCheckpoint(filepath, monitor='val_acc', verbose=1, save_best_only=True, mode='max')
 callbacks_list = [checkpoint]
 
@@ -164,8 +141,8 @@ model.fit(dataset_train_features, dataset_train_labels, validation_data=(dataset
 # predictions = model.predict(dataset_test_features)
 
 model_json = model.to_json()
-with open("G:/DL/Lung-Cancer_Detection/output/model_g_1.json", "w") as json_file:
+with open("/output/model_g_1.json", "w") as json_file:
     json_file.write(model_json)
 # serialize weights to HDF5
-model.save_weights("G:/DL/Lung-Cancer_Detection/output/model_g_1.h5")
+model.save_weights("/output/model_g_1.h5")
 print("Saved model to disk")
