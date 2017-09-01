@@ -162,56 +162,52 @@ for patient in patients[:1]:
 
         image_slices[slice_number] += np.int16(intercept)
 
-    segmented_lungs = segment_lung_mask(image_slices, False)
+
+    # lung segmentation mask:
     segmented_lungs_fill = segment_lung_mask(image_slices, True)
 
-    plt.imshow(image_slices[80])
-    plt.show()
+    # apply lung segmentation mask to all images in image_slices
     image_slices = np.multiply(image_slices, segmented_lungs_fill)
-    plt.imshow(image_slices[80])
-    plt.show()
+
+    image_slices = np.multiply(image_slices, [-1])
 
     # resizing scan images from (512, 512) to (dimension, dimension)
-    # image_slices = []
-    # for slice in slices:
-    #     temp = cv2.resize(np.array(slice.pixel_array), (dimension, dimension))
-    #     image_slices.append(temp)
-    # image_slices = np.array(image_slices)
-    #
-    # temp = []
-    # chunk_sizes = math.ceil(len(image_slices) / num_slices)
-    # for image_slice_chunk in chunks(image_slices, chunk_sizes):
-    #     image_slice_chunk = list(map(mean, zip(*image_slice_chunk)))
-    #     temp.append(image_slice_chunk)
-    #
-    # image_slices = temp
-    #
-    # if len(image_slices) == num_slices - 1:
-    #     image_slices.append(image_slices[-1])
-    #
-    # if len(image_slices) == num_slices - 2:
-    #     image_slices.append(image_slices[-1])
-    #     image_slices.append(image_slices[-1])
-    #
-    # if len(image_slices) == num_slices + 2:
-    #     new_val = list(map(mean, zip(*[image_slices[num_slices - 1], image_slices[num_slices], ])))
-    #     del image_slices[num_slices]
-    #     image_slices[num_slices - 1] = new_val
-    #
-    # if len(image_slices) == num_slices + 1:
-    #     new_val = list(map(mean, zip(*[image_slices[num_slices - 1], image_slices[num_slices], ])))
-    #     del image_slices[num_slices]
-    #     image_slices[num_slices - 1] = new_val
-    #
-    # print(len(image_slices))
-    #
-    #
-    #
-    #
-    #
-    #
-    # try:
-    #     # label = labels.get_value(patient, 'cancer')
-    #     np.save(OUTPUT_FOLDER + patient, image_slices)
-    # except:
-    #     print('label not found for ', patient)
+    new_image_slices = []
+    for image_slice in image_slices:
+        temp = cv2.resize(np.array(image_slice), (dimension, dimension))
+        new_image_slices.append(temp)
+
+    image_slices = np.array(new_image_slices)
+
+    temp = []
+    chunk_sizes = math.ceil(len(image_slices) / num_slices)
+    for image_slice_chunk in chunks(image_slices, chunk_sizes):
+        image_slice_chunk = list(map(mean, zip(*image_slice_chunk)))
+        temp.append(image_slice_chunk)
+
+    image_slices = temp
+
+    if len(image_slices) == num_slices - 1:
+        image_slices.append(image_slices[-1])
+
+    if len(image_slices) == num_slices - 2:
+        image_slices.append(image_slices[-1])
+        image_slices.append(image_slices[-1])
+
+    if len(image_slices) == num_slices + 2:
+        new_val = list(map(mean, zip(*[image_slices[num_slices - 1], image_slices[num_slices], ])))
+        del image_slices[num_slices]
+        image_slices[num_slices - 1] = new_val
+
+    if len(image_slices) == num_slices + 1:
+        new_val = list(map(mean, zip(*[image_slices[num_slices - 1], image_slices[num_slices], ])))
+        del image_slices[num_slices]
+        image_slices[num_slices - 1] = new_val
+
+    print(len(image_slices))
+
+    try:
+        # label = labels.get_value(patient, 'cancer')
+        np.save(OUTPUT_FOLDER + patient, image_slices)
+    except:
+        print('label not found for ', patient)
