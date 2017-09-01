@@ -16,8 +16,8 @@ number_of_classes = 2
 dimension = 112
 number_of_channels = 1
 batch_size = 50
-features_directory = 'G:/DL/Lung-Cancer_Detection/preprocessed_images/'
-labels_directory = 'G:/DL/Lung-Cancer_Detection/stage1_labels.csv/'
+features_directory = '/input/preprocessed_images/'
+labels_directory = '/input/stage1_labels.csv/'
 
 def load_features_and_labels_dataset(features_directory, labels_directory):
     dataset_features = []
@@ -135,7 +135,7 @@ decay = lrate/epochs
 adam = Adam(decay=decay)
 
 # checkpoint
-filepath = "G:/DL/Lung-Cancer_Detection/output/weights-improvement-{epoch:02d}-{val_acc:.2f}.hdf5"
+filepath = "/output/weights-improvement-{epoch:02d}-{val_acc:.2f}.hdf5"
 checkpoint = ModelCheckpoint(filepath, monitor='val_acc', verbose=1, save_best_only=True, mode='max')
 callbacks_list = [checkpoint]
 
@@ -146,8 +146,8 @@ model.fit(dataset_train_features, dataset_train_labels, validation_data=(dataset
 # predictions = model.predict(dataset_test_features)
 
 model_json = model.to_json()
-with open("G:/DL/Lung-Cancer_Detection/output/model_g_1.json", "w") as json_file:
+with open("/output/model_g_1.json", "w") as json_file:
     json_file.write(model_json)
 # serialize weights to HDF5
-model.save_weights("G:/DL/Lung-Cancer_Detection/output/model_g_1.h5")
+model.save_weights("/output/model_g_1.h5")
 print("Saved model to disk")
